@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHITI 地狱笑话人格测试</title>
+  <style>
+    :root {
+      --bg: #f6faf6;
+      --panel: #ffffff;
+      --text: #1e2a22;
+      --muted: #6a786f;
+      --line: #dbe8dd;
+      --soft: #edf6ef;
+      --accent: #6c8d71;
+      --accent-strong: #4d6a53;
+      --shadow: 0 16px 40px rgba(47, 73, 55, 0.08);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top left, #f8fff8 0, #f6faf6 36%, #f2f7f3 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .shell {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 56px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 28px;
+      margin-top: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(127, 165, 134, 0.18), rgba(127, 165, 134, 0.02));
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--accent-strong);
+      border: 1px solid var(--line);
+      background: var(--soft);
+      border-radius: 999px;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      max-width: 680px;
+    }
+    .hero .sub {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+      max-width: 720px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 24px;
+    }
+
+    .mini-panel {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fbfefb, #f3f8f4);
+    }
+
+    .mini-panel h3 {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .mini-panel ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .hero-minimal {
+      min-height: 48vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 42px 20px;
+    }
+    .hero-minimal::after { display: none; }
+    .hero-minimal h1 {
+      max-width: none;
+      margin: 0;
+    }
+    .hero-actions-single {
+      justify-content: center;
+      margin-top: 28px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+      font: inherit;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:disabled { cursor: not-allowed; opacity: 0.55; transform: none; }
+
+    .btn-primary {
+      background: var(--accent-strong);
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(77, 106, 83, 0.18);
+      font-weight: 700;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--accent-strong);
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      font-weight: 700;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .test-wrap,
+    .result-wrap {
+      margin-top: 22px;
+      padding: 22px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .progress {
+      flex: 1;
+      min-width: 240px;
+      height: 10px;
+      background: #edf3ee;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress > span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #97b59c, #5b7a62);
+      border-radius: inherit;
+      transition: width .22s ease;
+    }
+
+    .progress-text {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .question {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff, #fbfdfb);
+    }
+
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+    }
+
+    .question-title {
+      font-size: 16px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+
+    .option:hover {
+      border-color: #bcd0c1;
+      background: #f8fcf9;
+    }
+
+    .option input {
+      margin-top: 3px;
+      accent-color: var(--accent-strong);
+      transform: scale(1.1);
+      flex-shrink: 0;
+    }
+
+    .option-code {
+      font-weight: 800;
+      color: var(--accent-strong);
+      min-width: 22px;
+    }
+
+    .actions-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      padding-top: 6px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .result-hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .type-box,
+    .score-box,
+    .dim-box,
+    .top3-box,
+    .about-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff, #fbfdfb);
+    }
+
+    .type-kicker {
+      font-size: 12px;
+      color: var(--accent-strong);
+      margin-bottom: 8px;
+      letter-spacing: .05em;
+    }
+
+    .type-name {
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .type-subname {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .match {
+      margin-top: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .type-desc {
+      margin-top: 18px;
+      line-height: 1.85;
+      font-size: 15px;
+      color: #304034;
+    }
+
+    .score-box h3,
+    .dim-box h3,
+    .top3-box h3,
+    .about-box h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .score-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .score-item .k {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .score-item .v {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent-strong);
+    }
+
+    .dim-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .dim-pill {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .dim-pill .label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .dim-pill .value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent-strong);
+    }
+
+    .top3-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .top3-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .top3-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .top3-item span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .top3-score {
+      color: var(--accent-strong);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .about-box p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+
+    .result-layout {
+      display: grid;
+      gap: 18px;
+    }
+    .result-top {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .poster-box, .type-box, .analysis-box, .dim-box, .note-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff, #fbfdfb);
+    }
+    .poster-box {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      min-height: 280px;
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at top right, rgba(127,165,134,0.16), rgba(127,165,134,0) 40%),
+        linear-gradient(180deg, #ffffff, #f7fbf8);
+    }
+    .poster-box::after {
+      content: "";
+      position: absolute;
+      right: -46px;
+      bottom: -46px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(127,165,134,0.12), rgba(127,165,134,0.01));
+      pointer-events: none;
+    }
+    .poster-image {
+      width: 100%;
+      min-height: 220px;
+      max-height: 460px;
+      object-fit: contain;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.75);
+      position: relative;
+      z-index: 1;
+    }
+    .poster-box.no-image .poster-image {
+      display: none;
+    }
+    .poster-caption {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+    .type-subname {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .analysis-box h3, .dim-box h3, .note-box h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .result-actions {
+      margin-top: 22px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .analysis-box p {
+      margin: 0;
+      color: #304034;
+      font-size: 15px;
+      line-height: 1.9;
+      white-space: pre-wrap;
+    }
+    .dim-list {
+      display: grid;
+      gap: 12px;
+    }
+    .dim-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fff;
+    }
+    .dim-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .dim-item-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .dim-item-score {
+      color: var(--accent-strong);
+      font-weight: 800;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .dim-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .note-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .author-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff, #fbfdfb);
+      overflow: hidden;
+    }
+    .author-box summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 18px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .author-box summary::-webkit-details-marker { display: none; }
+    .author-box summary::after {
+      content: '展开';
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-strong);
+      border: 1px solid var(--line);
+      background: var(--soft);
+      padding: 6px 10px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+    .author-box[open] summary::after {
+      content: '收起';
+    }
+    .author-content {
+      border-top: 1px solid var(--line);
+      padding: 0 18px 18px;
+    }
+    .author-content p {
+      margin: 14px 0 0;
+      color: #304034;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .result-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+    @media (max-width: 860px) {
+      .result-top { grid-template-columns: 1fr; }
+    }
+
+@media (max-width: 860px) {
+      .hero-grid,
+      .result-hero {
+        grid-template-columns: 1fr;
+      }
+      .dim-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 600px) {
+      .shell { padding: 14px 12px 42px; }
+      .hero, .test-wrap, .result-wrap { padding: 16px; }
+      .hero h1 { font-size: 32px; }
+      .question-title { font-size: 15px; }
+      .dim-grid,
+      .score-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section id="intro" class="screen active">
+      <div class="hero card hero-minimal">
+        <h1>MBTI已经过时，SHITI来了。</h1>
+        <div class="hero-actions hero-actions-single">
+          <button id="startBtn" class="btn-primary">开始测试</button>
+        </div>
+        <div style="padding-top: 2rem; display: flex; flex-direction: column;">
+          <span>
+            原作者：
+            <a href="https://space.bilibili.com/417038183">B站@蛆肉儿串儿</a>
+          </span>
+          <span>
+            托管：Cloudflare (免费)
+          </span>
+          <span>
+            域名：Spaceship (自费)
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section id="test" class="screen">
+      <div class="test-wrap card">
+        <div class="topbar">
+          <div class="progress"><span id="progressBar"></span></div>
+          <div class="progress-text" id="progressText">0 / 31</div>
+        </div>
+
+        <div id="questionList" class="question-list"></div>
+
+        <div class="actions-bottom">
+          <div class="hint" id="testHint">全选完才会放行。世界已经够乱了，起码把题做完整。</div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button id="backIntroBtn" class="btn-secondary">返回首页</button>
+            <button id="submitBtn" class="btn-primary" disabled>提交并查看结果</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="result" class="screen">
+      <div class="result-wrap card">
+        <div class="result-layout">
+          <div class="result-top">
+            <div class="poster-box" id="posterBox">
+              <img id="posterImage" class="poster-image" alt="人格结果图" />
+              <div id="posterCaption" class="poster-caption">怎么样，被我拿捏了吧？</div>
+            </div>
+
+            <div class="type-box">
+              <div class="type-kicker" id="resultModeKicker">你的主类型</div>
+              <div class="type-name" id="resultTypeName">CTRL（拿捏者）</div>
+              <div class="match" id="matchBadge">匹配度 92%</div>
+              <div class="type-subname" id="resultTypeSub">系统备注会显示在这里。</div>
+            </div>
+          </div>
+
+          <div class="analysis-box">
+            <h3>该人格的简单解读</h3>
+            <p id="resultDesc"></p>
+          </div>
+
+          <div class="dim-box">
+            <h3>十五维度评分</h3>
+            <div id="dimList" class="dim-list"></div>
+          </div>
+
+          <div class="note-box">
+            <h3>友情提示</h3>
+            <p id="funNote">本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、招魂、算命或人生判决书。</p>
+          </div>
+
+          <details class="author-box">
+            <summary>作者的话</summary>
+            <div class="author-content">
+              <p>本测试首发于b站up主蛆肉儿串儿（UID417038183），初衷是劝诫一位爱喝酒的朋友戒酒。</p>
+              <p>由于作者的人格是SHIT愤世者，所以平等的攻击了各位，在此抱歉！！不过我是一个绝世大美女，你们一定会原谅我，有B站的朋友们也可以关注我。</p>
+              <p>关于这个测试，我没法很好的平衡娱乐和专业性，因此对于一些人格的阐释较为模糊或完全不准（如屌丝可能并非真的屌丝），如有冒犯非常抱歉！！</p>
+              <p>再鉴于时间精力有限，就随便搞了一个先这样玩玩，后续会慢慢完善修改的，总之好玩为主，还请不要用于盈利呀。</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="result-actions">
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button id="restartBtn" class="btn-secondary">重新测试</button>
+            <button id="toTopBtn" class="btn-primary">回到首页</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+
+  <script>
+    const dimensionMeta = {
+      S1: { name: 'S1 自我觉知', model: '自我模型' },
+      S2: { name: 'S2 幽默边界', model: '自我模型' },
+      S3: { name: 'S3 价值立场', model: '自我模型' },
+      E1: { name: 'E1 情绪共振', model: '情感模型' },
+      E2: { name: 'E2 共情深度', model: '情感模型' },
+      E3: { name: 'E3 关系亲密度', model: '情感模型' },
+      A1: { name: 'A1 世界底色', model: '态度模型' },
+      A2: { name: 'A2 规则态度', model: '态度模型' },
+      A3: { name: 'A3 意义感知', model: '态度模型' },
+      Ac1: { name: 'Ac1 笑点动机', model: '行动驱力模型' },
+      Ac2: { name: 'Ac2 反应速度', model: '行动驱力模型' },
+      Ac3: { name: 'Ac3 表达模式', model: '行动驱力模型' },
+      So1: { name: 'So1 社交输出', model: '社交模型' },
+      So2: { name: 'So2 社交距离', model: '社交模型' },
+      So3: { name: 'So3 面具厚度', model: '社交模型' }
+    };
+    const questions = [
+      {
+        id: 'q1', dim: 'S1',
+        text: '有人说"喜欢地狱笑话的人内心其实很脆弱"，你的反应更接近？',
+        options: [
+          { label: '被说中了，我笑是因为我不敢哭。', value: 1 },
+          { label: '也许有点道理吧。', value: 2 },
+          { label: '放屁，我笑纯粹是因为好笑。', value: 3 }
+        ]
+      },
+      {
+        id: 'q2', dim: 'S1',
+        text: '有人因为你笑了就骂你"冷血"，你更接近哪种状态？',
+        options: [
+          { label: '我确实不太正常，我反思。', value: 1 },
+          { label: '有点尴尬，但不至于怀疑自己。', value: 2 },
+          { label: '你太敏感了，一个笑话而已。', value: 3 }
+        ]
+      },
+      {
+        id: 'q3', dim: 'S2',
+        text: '你清楚自己为什么觉得某些东西好笑吗？',
+        options: [
+          { label: '完全不清楚，笑了就笑了。', value: 1 },
+          { label: '大概知道一点，但说不清。', value: 2 },
+          { label: '很清楚，我的笑点有严格的逻辑。', value: 3 }
+        ]
+      },
+      {
+        id: 'q4', dim: 'S2',
+        text: '如果有个心理分析师研究你的幽默感，他会觉得：',
+        options: [
+          { label: '这个人怕是有大问题。', value: 1 },
+          { label: '挺有意思的，但有点复杂。', value: 2 },
+          { label: '这人很透明，没什么可分析的。', value: 3 }
+        ]
+      },
+      {
+        id: 'q5', dim: 'S3',
+        text: '"地狱笑话之所以好笑，是因为它揭露了真相。"你对这句话的态度是？',
+        options: [
+          { label: '完全认同，这就是本质。', value: 3 },
+          { label: '有点道理，但不全是。', value: 2 },
+          { label: '不好笑就是不好笑，跟真相没关系。', value: 1 }
+        ]
+      },
+      {
+        id: 'q6', dim: 'S3',
+        text: '你觉得大多数人笑不出地狱笑话，是因为：',
+        options: [
+          { label: '他们太脆弱了，连玩笑都开不起。', value: 3 },
+          { label: '教育水平和成长环境不同吧。', value: 2 },
+          { label: '他们有权感到不适，这是正常的。', value: 1 }
+        ]
+      },
+      {
+        id: 'q7', dim: 'E1',
+        text: '你最好的朋友认真告诉你"你上次那个笑话真的让我很难受"，你会？',
+        options: [
+          { label: '立刻道歉，然后内疚好几天。', value: 1 },
+          { label: '有点尴尬，但还是在乎朋友的。', value: 2 },
+          { label: '你不懂笑就别硬装了。', value: 3 }
+        ]
+      },
+      {
+        id: 'q8', dim: 'E1',
+        text: '你发了一个地狱笑话到群里，所有人沉默了。你的内心更接近：',
+        options: [
+          { label: '我是不是说错话了，要不撤回了。', value: 1 },
+          { label: '有点尴尬，但算了。', value: 2 },
+          { label: '你们不笑是我的损失。', value: 3 }
+        ]
+      },
+      {
+        id: 'q9', dim: 'E2',
+        text: '你给一个不太熟的人讲了个地狱笑话，对方直接哭了。你更接近：',
+        options: [
+          { label: '我马上道歉，心里也很难受。', value: 3 },
+          { label: '有点尴尬，但不太知道怎么收场。', value: 2 },
+          { label: '至于吗，一个笑话而已。', value: 1 }
+        ]
+      },
+      {
+        id: 'q10', dim: 'E2',
+        text: '刷到一个关于自然灾害的地狱笑话Meme，你更接近：',
+        options: [
+          { label: '心情很复杂，笑不出来。', value: 1 },
+          { label: '有点想笑，但觉得不应该。', value: 2 },
+          { label: '直接笑了，灾难归灾难，好笑归好笑。', value: 3 }
+        ]
+      },
+      {
+        id: 'q11', dim: 'E3',
+        text: '你和对象在看喜剧，TA觉得好笑的段子你全觉得冒犯。你更接近：',
+        options: [
+          { label: '那我配合TA笑一下吧。', value: 1 },
+          { label: '各笑各的，互不干涉。', value: 2 },
+          { label: '直接说"这哪里好笑了"。', value: 3 }
+        ]
+      },
+      {
+        id: 'q12', dim: 'E3',
+        text: '有人在你的评论区写了一大段小作文，说你"没有同情心"。你：',
+        options: [
+          { label: '认真回复，解释自己的想法。', value: 1 },
+          { label: '看了一眼，懒得回复。', value: 2 },
+          { label: '拉黑，然后继续笑。', value: 3 }
+        ]
+      },
+      {
+        id: 'q13', dim: 'A1',
+        text: '你觉得这个世界的底色更接近什么？',
+        options: [
+          { label: '烂透了，但正因如此才要笑。', value: 3 },
+          { label: '有好有坏吧，不好说。', value: 2 },
+          { label: '虽然黑暗，但我愿意相信善良。', value: 1 }
+        ]
+      },
+      {
+        id: 'q14', dim: 'A1',
+        text: '泰坦尼克号的P图地狱笑话满天飞，你的态度更接近：',
+        options: [
+          { label: '不应该，那是真实发生过的悲剧。', value: 1 },
+          { label: '心情复杂，但能理解有人觉得好笑。', value: 2 },
+          { label: 'P得好的确实好笑，别道德绑架了。', value: 3 }
+        ]
+      },
+      {
+        id: 'q15', dim: 'A2',
+        text: '你觉得应该对笑话设置边界吗？',
+        options: [
+          { label: '不应该，什么都可以开玩笑。', value: 1 },
+          { label: '大部分可以，但要看场合。', value: 2 },
+          { label: '应该有基本底线，不能什么都拿来笑。', value: 3 }
+        ]
+      },
+      {
+        id: 'q16', dim: 'A2',
+        text: '你在公司群里发了个地狱笑话，老板私聊你说"注意影响"。你会：',
+        options: [
+          { label: '当面道歉，以后再也不在群里发了。', value: 3 },
+          { label: '表面说好的好的，换个群继续发。', value: 2 },
+          { label: '心里不服但嘴上说好的。', value: 1 }
+        ]
+      },
+      {
+        id: 'q17', dim: 'A3',
+        text: '你突然觉得人生没有任何意义，一切都很荒诞。你的反应更接近：',
+        options: [
+          { label: '太好了，那我想笑就笑，想干嘛干嘛。', value: 1 },
+          { label: '有点空虚，但日子还得过。', value: 2 },
+          { label: '感到深深的无力。', value: 3 }
+        ]
+      },
+      {
+        id: 'q18', dim: 'A3',
+        text: '"幽默是对抗虚无的最后武器"，你对这句话的态度：',
+        options: [
+          { label: '完全同意，笑是我活下去的理由之一。', value: 3 },
+          { label: '有点文艺，但不完全反对。', value: 2 },
+          { label: '太矫情了，笑就是笑，别上价值。', value: 1 }
+        ]
+      },
+      {
+        id: 'q19', dim: 'Ac1',
+        text: '你笑出声的那个瞬间，更接近哪种状态？',
+        options: [
+          { label: '为了避免面对更深层的东西。', value: 1 },
+          { label: '看情况，有时候是纯粹觉得有趣。', value: 2 },
+          { label: '因为它是真的，我忍不住。', value: 3 }
+        ]
+      },
+      {
+        id: 'q20', dim: 'Ac1',
+        text: '什么情况下你会主动给别人讲地狱笑话？',
+        options: [
+          { label: '基本不会，我怕冒犯别人。', value: 1 },
+          { label: '跟很熟的朋友才会。', value: 2 },
+          { label: '随时随地，有人在场我就讲。', value: 3 }
+        ]
+      },
+      {
+        id: 'q21', dim: 'Ac2',
+        text: '有人问你"你觉得拿历史悲剧开玩笑合适吗"，你更接近：',
+        options: [
+          { label: '犹豫半天，怕说错话。', value: 1 },
+          { label: '看是什么悲剧，有的合适有的不合适。', value: 2 },
+          { label: '合适，历史都过去了，笑一下怎么了。', value: 3 }
+        ]
+      },
+      {
+        id: 'q22', dim: 'Ac2',
+        text: '这道题没有题目，请盲选：',
+        options: [
+          { label: '反复思考后感觉应该选A？', value: 1 },
+          { label: '啊，要不选B？', value: 2 },
+          { label: '不会就选C？', value: 3 }
+        ]
+      },
+      {
+        id: 'q23', dim: 'Ac3',
+        text: '朋友说"你上次那个笑话也太狠了"，你内心更接近：',
+        options: [
+          { label: '我是不是太过分了……', value: 1 },
+          { label: '啊，还好吧。', value: 2 },
+          { label: '那是你承受力太差。', value: 3 }
+        ]
+      },
+      {
+        id: 'q24', dim: 'Ac3',
+        text: '你想分享一个地狱笑话但不确定观众能不能接受：',
+        options: [
+          { label: '算了，多一事不如少一事。', value: 1 },
+          { label: '先试探性地讲个温和的。', value: 2 },
+          { label: '管他呢，讲了再说。', value: 3 }
+        ]
+      },
+      {
+        id: 'q25', dim: 'So1',
+        text: '聚会上有人讲了一个有点冒犯的笑话，你更接近：',
+        options: [
+          { label: '尴尬沉默，祈祷没人看我反应。', value: 1 },
+          { label: '礼貌性地笑一下。', value: 2 },
+          { label: '加入并讲一个更狠的。', value: 3 }
+        ]
+      },
+      {
+        id: 'q26', dim: 'So1',
+        text: '刚认识一个朋友，你想测试TA的幽默底线。你会：',
+        options: [
+          { label: '先聊安全的话题。', value: 1 },
+          { label: '慢慢试探，看TA反应。', value: 2 },
+          { label: '上来就丢一个地狱的，看TA接不接。', value: 3 }
+        ]
+      },
+      {
+        id: 'q27', dim: 'So2',
+        text: '关于"有些人不配跟我开玩笑"这个想法，你更接近：',
+        options: [
+          { label: '认同，幽默感是有门槛的。', value: 3 },
+          { label: '看情况，有些人确实get不到。', value: 2 },
+          { label: '不认同，谁都有资格笑。', value: 1 }
+        ]
+      },
+      {
+        id: 'q28', dim: 'So2',
+        text: '你在网上和现实中展现的幽默感：',
+        options: [
+          { label: '完全一样，我线上线下都是那个鬼样子。', value: 1 },
+          { label: '网上更放飞一点。', value: 2 },
+          { label: '差别很大，网上我是魔鬼，现实中我是好人。', value: 3 }
+        ]
+      },
+      {
+        id: 'q29', dim: 'So3',
+        text: '你在一群很"正"的人面前，有人讲了个地狱笑话。你的表现更接近：',
+        options: [
+          { label: '直接笑出声，我不装。', value: 1 },
+          { label: '嘴角动了一下，但忍住了。', value: 2 },
+          { label: '跟着大家一起皱眉。', value: 3 }
+        ]
+      },
+      {
+        id: 'q30', dim: 'So3',
+        text: '你在不同人面前展示的"幽默程度"一样吗？',
+        options: [
+          { label: '完全一样，我是什么人大家都看得到。', value: 1 },
+          { label: '有点不一样，熟人面前更放肆。', value: 2 },
+          { label: '完全不一样，每个人看到的我是不同的版本。', value: 3 }
+        ]
+      }
+    ];
+    const specialQuestions = [
+      {
+        id: 'drink_gate_q1',
+        special: true,
+        kind: 'drink_gate',
+        text: '您平时有什么爱好？',
+        options: [
+          { label: '吃喝拉撒', value: 1 },
+          { label: '艺术爱好', value: 2 },
+          { label: '饮酒', value: 3 },
+          { label: '健身', value: 4 }
+        ]
+      },
+      {
+        id: 'drink_gate_q2',
+        special: true,
+        kind: 'drink_trigger',
+        text: '您对饮酒的态度是？',
+        options: [
+          { label: '小酌怡情，喝不了太多。', value: 1 },
+          { label: '我习惯将白酒灌在保温杯，当白开水喝，酒精令我信服。', value: 2 }
+        ]
+      }
+    ];
+
+    const TYPE_LIBRARY = {
+  "CLOWN": {
+    "code": "CLOWN",
+    "cn": "地狱小丑",
+    "intro": "你笑了，你下地狱了。",
+    "desc": "恭喜您，您测出了最不需要解释的人格——CLOWN，地狱小丑。当别人还在纠结'这个能不能开玩笑'的时候，您已经把地狱笑话讲成了单口喜剧专场。您的笑点比马里亚纳海沟还深，您的笑声比末日审判的号角还响。CLOWN人格的核心超能力是：在任何场景下都能笑出来，包括但不限于自然灾害P图、历史悲剧Meme、以及在严肃场合突然蹦出来的地狱段子。您不是没有同情心，您只是已经超越了同情心的维度，进入了'宇宙万物皆可笑'的至高境界。拥有一个CLOWN朋友意味着您的朋友圈永远不会无聊——但也永远不会安全。"
+  },
+  "DEAD": {
+    "code": "DEAD",
+    "cn": "已故人士",
+    "intro": "我没死，我只是不觉得好笑。",
+    "desc": "恭喜您，您测出了全世界最冷静的人格——DEAD，已故人士。在所有地狱笑话面前，您的表情像参加追悼会一样严肃。不是您没有幽默感，是您的幽默感已经完成了涅槃——它超越了'好笑'和'不好笑'的二元对立，进入了一种'哦'的境界。DEAD人格的内心是一座活火山，表面冰冷，深处滚烫。但问题是，那个深处可能连您自己都找不到了。您看地狱笑话的眼神，就像一位退休的法医在看一具已经解剖过一百遍的尸体——没有惊讶，没有恐惧，也没有笑意。"
+  },
+  "ANGRY": {
+    "code": "ANGRY",
+    "cn": "举报者",
+    "intro": "这个笑话已经越界了！",
+    "desc": "恭喜您，您测出了全互联网最稀缺的人格——ANGRY，举报者。是的，当地狱笑话满天飞的时候，您是那个敢于站出来说'这不好笑'的孤勇者。您的举报键比您的笑肌发达，您的道德底线比喜马拉雅山还高。ANGRY人格不是不懂幽默，而是对'什么值得笑'有着极其严苛的审核标准。您是互联网的内容审查AI转世，是所有地狱笑话的天然灭火器。拥有ANGRY朋友的好处是：您永远知道什么不该说。坏处是：您可能什么话都会让他生气。"
+  },
+  "EVIL": {
+    "code": "EVIL",
+    "cn": "纯恶人",
+    "intro": "这还不够狠。",
+    "desc": "恭喜您，您测出了让其他地狱笑话爱好者都感到害怕的人格——EVIL，纯恶人。CLOWN只是觉得好笑，而EVIL是觉得'还不够'。您的笑点阈值已经高到了正常人类无法企及的水平，普通的冒犯性笑话对您来说就像白开水一样寡淡。EVIL人格的大脑里住着一个永不满足的编剧， constantly在写更狠、更黑色、更让人笑完之后想扇自己一巴掌的段子。您不是坏人，您只是在一个'越冒犯越好笑'的方向上走得太远了，远到回头都看不见来时的路。"
+  },
+  "PHILO": {
+    "code": "PHILO",
+    "cn": "哲学家",
+    "intro": "已深度思考100s。",
+    "desc": "恭喜您，您测出了最像AI的人格——PHILO，哲学家。别人笑是因为本能，您笑是因为经过了三重逻辑推演、两次伦理审查和一次存在主义拷问之后，结论是'这个确实可以笑'。PHILO人格看地狱笑话，看的不是笑点，是人性。您能在一个冒犯性Meme里读出福柯的权力理论，在一个地狱段子里看到加缪的荒诞哲学。当别人问'这有什么好笑的'时，您会用八百字解释'好笑'和'值得笑'之间的本质区别。"
+  },
+  "SNICKER": {
+    "code": "SNICKER",
+    "cn": "憋笑人",
+    "intro": "我没笑，是嘴角自己动的。",
+    "desc": "恭喜您，您测出了最痛苦的人格——SNICKER，憋笑人。您的内心在狂笑，但您的面部表情在努力维持体面。您的灵魂在地狱里开派对，但您的肉体还在人间装正经。SNICKER人格的核心矛盾是：您明明觉得好笑，但您的道德感不允许您笑出声。于是您变成了一个行走的表情管理大师——嘴角抽搐了一下，又迅速恢复平静，就像什么都没发生一样。但您知道，有什么东西已经在您的内心深处笑到抽筋了。"
+  },
+  "SAVAGE": {
+    "code": "SAVAGE",
+    "cn": "嘴替战神",
+    "intro": "你说的不够狠，我来。",
+    "desc": "恭喜您，您测出了最具攻击性的人格——SAVAGE，嘴替战神。别人讲地狱笑话是为了搞笑，您讲地狱笑话是为了输出。您的每一句吐槽都像一把精准制导的手术刀，切中要害的同时还能顺带把对方的三观解剖一遍。SAVAGE人格不是单纯觉得冒犯性的东西好笑，而是把'说别人不敢说的话'当成了自己的人生使命。您不是小丑，您是那个让小丑都觉得自己不够狠的幕后黑手。"
+  },
+  "COFFIN": {
+    "code": "COFFIN",
+    "cn": "棺材板人",
+    "intro": "我的祖先在棺材里翻了个身。",
+    "desc": "恭喜您，您测出了最让祖先蒙羞的人格——COFFIN，棺材板人。您的幽默感让八百年前的祖宗都在地下坐了起来，发出'这孩子是不是基因突变了'的疑问。COFFIN人格的笑点建立在对一切神圣事物的解构之上——越是庄严的、神圣的、不可触碰的，您越觉得'这有什么不能说的'。您不是故意要冒犯谁，您只是觉得如果连开玩笑都不行，那这个世界未免太无聊了。"
+  },
+  "GUILTY": {
+    "code": "GUILTY",
+    "cn": "忏悔者",
+    "intro": "我笑了……我有罪。",
+    "desc": "恭喜您，您测出了最自我折磨的人格——GUILTY，忏悔者。您的标准反应流程是：听到地狱笑话 → 笑出声 → 立刻觉得自己不是好人 → 陷入内疚 → 下次还笑。GUILTY人格拥有全世界最发达的事后诸葛亮系统——每次笑完之后都会进行一次深刻的灵魂拷问，但下次遇到更好笑的地狱段子时，您依然会重蹈覆辙。您是道德法庭上的惯犯——每次都认罪，每次都再犯。"
+  },
+  "SHIELD": {
+    "code": "SHIELD",
+    "cn": "防御大师",
+    "intro": "我不是觉得好笑，我只是……",
+    "desc": "恭喜您，您测出了最擅长自我说服的人格——SHIELD，防御大师。您的经典句式是：'我不是觉得好笑，我只是欣赏它的创意'、'我没有在笑，我只是觉得这种现象很有趣'。SHIELD人格是全世界最好的心理防御工程师——当您的笑点出卖了您的时候，您的大脑会立刻启动紧急公关，为您的'不该笑但笑了'找到一百个合理的解释。您不是虚伪，您只是太了解自己了——知道自己在笑什么，但不想让任何人（包括自己）知道。"
+  },
+  "BUTTER": {
+    "code": "BUTTER",
+    "cn": "乐子人",
+    "intro": "我就看看，我不说话。",
+    "desc": "恭喜您，您测出了最纯粹的吃瓜人格——BUTTER，乐子人。您不生产地狱笑话，您只是地狱笑话的搬运工。您的核心技能是在任何混乱的评论区保持一种'我就看看不说话'的超然姿态，同时嘴角的弧度暴露了您的真实想法。BUTTER人格不是坏人，也不是好人——您只是一个路过的、觉得一切都很精彩的人类观察员。世界是一场大型真人实境秀，而您是VIP观众。"
+  },
+  "VOID": {
+    "code": "VOID",
+    "cn": "虚空人",
+    "intro": "既不好笑也不冒犯，我只是存在。",
+    "desc": "恭喜您，您测出了全世界最难被定义的人格——VOID，虚空人。地狱笑话对您来说就像往黑洞里扔石子——没有任何回响。您不是觉得不好笑，也不是觉得好笑，您是根本没有反应。VOID人格不是冷漠，而是一种超越了'好笑'和'冒犯'二元对立的终极中立态。您看地狱笑话的眼神，就像看一份天气预报——既不会兴奋，也不会愤怒，只会'哦'。在这个人人都要有立场的时代，您的没有立场本身就是最独特的立场。"
+  },
+  "JUDGE": {
+    "code": "JUDGE",
+    "cn": "审判者",
+    "intro": "我有权决定什么好笑。",
+    "desc": "恭喜您，您测出了最具权威感的人格——JUDGE，审判者。您不仅对地狱笑话有自己的判断，还对'别人该不该笑'有着强烈的意见。您的大脑是一台行走的内容审核引擎，每一个笑话都要经过您的'好笑度''道德度''时机恰当度'三维评估。JUDGE人格不是不懂幽默，您的幽默感只是比大多数人都多了一个'审批流程'。您通过了的笑话，那才是真正的好笑话——因为经过了最严格的审查。"
+  },
+  "MIRROR": {
+    "code": "MIRROR",
+    "cn": "照妖镜",
+    "intro": "我只是说出了大家都想说的话。",
+    "desc": "恭喜您，您测出了最让人又爱又恨的人格——MIRROR，照妖镜。您不是地狱笑话的创造者，您是所有人内心OS的公开播放器。您最大的超能力是'说出大家都不敢说但都在想的话'，然后看着一半人笑、一半人愤怒。MIRROR人格像一面诚实到残忍的镜子——您不美化任何东西，也不丑化任何东西，您只是把原本就在那里的东西指出来。人们恨您，因为您让他们看到了自己不想承认的那部分。"
+  },
+  "WICKED": {
+    "code": "WICKED",
+    "cn": "坏种",
+    "intro": "我天生如此。",
+    "desc": "恭喜您，您测出了最让心理学家头疼的人格——WICKED，坏种。您不是后天学会了欣赏地狱笑话，您天生就觉得'冒犯'是幽默的最高形式。WICKED人格的核心特征不是'觉得地狱笑话好笑'，而是'觉得不好笑的地狱笑话比不好笑的笑话更可笑'。您的幽默感是一把上了膛的枪，随时可能走火。但您不是坏人——您只是恰好出生在了一个'幽默感'和'道德感'被放在天平两端的世界里，而您的天平天生就歪了。"
+  },
+  "SNOW": {
+    "code": "SNOW",
+    "cn": "白雪人",
+    "intro": "我不太懂你们在笑什么……",
+    "desc": "恭喜您，您测出了最纯洁的人格——SNOW，白雪人。您不是不想笑，您是真的没get到地狱笑话的点在哪里。当一个P图的灾难Meme在群里传阅时，您是那个问'这是什么意思'的人。SNOW人格的心灵像刚下过一场大雪的原野——干净、洁白、没有被任何冒犯性内容污染过。您可能觉得这个世界的人都很奇怪，为什么要把悲剧拿来开玩笑。答案是：因为我们不这样笑的话，就只剩哭了。"
+  },
+  "FIRE": {
+    "code": "FIRE",
+    "cn": "火刑架人",
+    "intro": "烧死我，我也不认错。",
+    "desc": "恭喜您，您测出了最不怕被喷的人格——FIRE，火刑架人。您的核心信条是：我笑我的，你喷你的，我们互不干涉。FIRE人格拥有一种令人羡慕的心理防御机制——无论多少人指责您'没有同情心'，您都能心安理得地继续笑您的地狱笑话。您不是不知道那些笑话可能冒犯到别人，您只是觉得'如果连笑都要被审判，那和烧死异端有什么区别'。您是中世纪猎巫运动中那个被绑在火刑架上还在笑的人。"
+  },
+  "MUTE": {
+    "code": "MUTE",
+    "cn": "沉默者",
+    "intro": "……",
+    "desc": "恭喜您，您测出了最安静的性格——MUTE，沉默者。面对地狱笑话，您的标准反应是：……不是愤怒，不是好笑，不是纠结，就是纯粹的沉默。MUTE人格的大脑在面对冒犯性内容时会启动一种独特的'宕机模式'——既不知道该笑还是该怒，于是选择了最不费能量的选项：什么都不做。您是所有群聊里最安静的存在，是所有争论中最不表态的人。但沉默不代表没有想法——您只是觉得说了也没用。"
+  },
+  "SMILE": {
+    "code": "SMILE",
+    "cn": "笑面虎",
+    "intro": "我笑了，但你不知道我是真笑还是假笑。",
+    "desc": "恭喜您，您测出了最难以捉摸的人格——SMILE，笑面虎。您在任何场景下都能保持一个得体的微笑——听到地狱笑话时笑，听到严肃话题时也笑。问题是，没有人（包括您自己）确定这个笑是真的还是假的。SMILE人格像一个人形表情识别系统的bug——所有输入都输出同一个结果：😊。您不是没有态度，您只是把自己的态度包装得太好了，好到连接收方都不知道您是在嘲讽、认同、还是单纯的脸部肌肉抽搐。"
+  },
+  "CHAIN": {
+    "code": "CHAIN",
+    "cn": "锁链人",
+    "intro": "我想笑，但我不能。",
+    "desc": "恭喜您，您测出了最纠结的人格——CHAIN，锁链人。您的内心有两个小人在打架——一个说'这太搞笑了必须笑'，另一个说'你笑了就是个混蛋'。CHAIN人格的每一天都是一场幽默感和道德感之间的拔河比赛，而绳子就是您的嘴角。您笑也不是，不笑也不是，最终选择了'嘴角微微上扬但迅速收回'的薛定谔式微笑。您是全世界唯一一个能同时理解'好笑'和'不该笑'两种对立情绪的人。"
+  },
+  "SKULL": {
+    "code": "SKULL",
+    "cn": "骷髅王",
+    "intro": "死亡？那是最好笑的话题。",
+    "desc": "恭喜您，您测出了最不怕死的人格——SKULL，骷髅王。在所有地狱笑话的分类中，跟死亡相关的段子是您的最爱。您不是在逃避死亡恐惧——您是在用笑声主动拥抱它。SKULL人格的核心信念是：死亡是唯一的绝对公平，既然每个人都要死，那为什么不拿它开个玩笑呢？您把殡仪馆的段子讲得像脱口秀，把葬礼的Meme发得像贺卡。别人觉得您在逃避现实，您觉得别人在逃避笑声。"
+  },
+  "MASK": {
+    "code": "MASK",
+    "cn": "面具人",
+    "intro": "你看到的我，不是真正的我。",
+    "desc": "恭喜您，您测出了最表里不一的人格——MASK，面具人。您在公开场合对地狱笑话的态度和在私聊里的态度，差距大到像是两个人。在群里您是'这个不太好吧'的正义使者，在私聊里您是'哈哈哈哈再来一个'的终极吃瓜群众。MASK人格不是虚伪——您只是太了解社会规则了，知道在不同的场景要展示不同的自己。您的公开版本是v1.0审核通过版，私人版本是v9.9开发者预览版。"
+  },
+  "ASHES": {
+    "code": "ASHES",
+    "cn": "灰烬人",
+    "intro": "一切终将化为灰烬，不如先笑为敬。",
+    "desc": "恭喜您，您测出了最虚无主义的人格——ASHES，灰烬人。您笑地狱笑话不是因为觉得它们好笑，而是因为它们印证了您对这个世界的终极判断——一切都没有意义，一切终将化为灰烬。ASHES人格的笑声里带着一种深沉的疲惫感——不是对某个具体笑话的疲惫，而是对整个'人类居然还需要笑'这件事的疲惫。您笑，不是因为开心，是因为不笑的话，您可能就再也笑不出来了。"
+  },
+  "GHOST": {
+    "code": "GHOST",
+    "cn": "幽灵",
+    "intro": "我在好笑与冒犯之间游荡。",
+    "desc": "恭喜您，您测出了最暧昧不清的人格——GHOST，幽灵。您既不是觉得地狱笑话好笑，也不是觉得不好笑——您只是在这个问题的上空飘荡，不落地、不表态、不站队。GHOST人格像是一个幽默感的量子叠加态——在您开口之前，您同时处于'觉得好笑'和'觉得冒犯'两种状态，只有被追问的时候才会坍缩成其中一个。您是所有争论中最难被归类的人——不是因为没有立场，而是因为您的立场本身就是流动的。"
+  },
+  "CHAOS": {
+    "code": "CHAOS",
+    "cn": "混沌",
+    "intro": "哈哈哈哈哈。",
+    "desc": "恭喜您，由于您的脑回路过于清奇，标准人格库已经全面崩溃。第一人格匹配率低于60%时，系统会为您强制匹配这个人格——CHAOS，混沌。您不是地狱笑话爱好者，您是地狱笑话本身。您的存在就是对所有分类系统的最大冒犯。当心理学家试图用十五个维度来定义您的时候，十五个维度同时报了警。CHAOS人格的特征只有一个：哈哈哈哈哈哈……对不起，这就是全部特征了。您的笑点是一个黑洞，任何试图理解它的理论都会被吸进去然后消失。"
+  },
+  "DRUNK": {
+    "code": "DRUNK",
+    "cn": "酒鬼",
+    "intro": "烈酒烧喉，不得不醉。",
+    "desc": "您为什么走路摇摇晃晃？您为什么总是情绪高涨？您为什么看东西是重影的？因为您体内流淌的不是血液，是美味的五粮液！是国窖1573！是江小白！是陕西五粮液！哦，美味的白酒，每一滴都在燃烧，都在沸腾。您是否已经习惯了将白酒灌入保温杯，当作白开水一饮而下？多么伟大的白酒！它让您在饭桌上谈笑风生，在厕所里抱着马桶忏悔人生；它让您觉得自己是夜场诗人，是宇宙中心那团不灭的火，直到第二天上午十点，您的头像裂开的核桃，嘴角挂着食物残渣，灵魂缩在角落里。您终于明白，昨晚那个高谈阔论、拍桌怒吼的人，已经成为了一個酒鬼。"
+  },
+  "HHHH": {
+    "code": "HHHH",
+    "cn": "傻乐者",
+    "intro": "哈哈哈哈哈哈。",
+    "desc": "恭喜您！由于您的思维回路过于清奇，标准人格库已全面崩溃。第一人格匹配率只有60％以下时，系统才会为您强制匹配这个人格——【HHHH - 傻乐者】。这个人格有什么特质？哈哈哈哈哈哈哈哈哈哈哈哈！对不起，这就是全部的特质了。您可以查看十五维度进行不专业的评估，实在是抱歉！作者设置人格时没有考虑全面，因此才会出现这样的状况。哈哈哈哈哈哈……笑着笑着，我便哭了出来。怎么会有人的脑回路这么新奇。"
+  }
+};
+    const TYPE_IMAGES = {};
+
+    const NORMAL_TYPES = [
+  { "code": "CLOWN",   "pattern": "HHH-HHH-HHH-HHH-HHH" },
+  { "code": "DEAD",    "pattern": "LLL-LLL-LLL-LLL-LLL" },
+  { "code": "ANGRY",   "pattern": "LLL-LLL-LLH-LLL-LLH" },
+  { "code": "EVIL",    "pattern": "HHH-HHH-HHH-HHL-HHH" },
+  { "code": "PHILO",   "pattern": "HHM-HHM-MMH-HMM-MMH" },
+  { "code": "SNICKER", "pattern": "MML-MMH-MML-MHL-MMH" },
+  { "code": "SAVAGE",  "pattern": "HHH-HHH-HML-HHH-HHL" },
+  { "code": "COFFIN",  "pattern": "HHH-HHL-HHH-HHL-HHL" },
+  { "code": "GUILTY",  "pattern": "MLL-MLH-MLM-MLL-MML" },
+  { "code": "SHIELD",  "pattern": "MML-MLH-MML-MHL-MMH" },
+  { "code": "BUTTER",  "pattern": "MMM-MMM-MMM-MMM-MMM" },
+  { "code": "VOID",    "pattern": "MMM-MLL-MLM-MLL-MLM" },
+  { "code": "JUDGE",   "pattern": "LHH-LLH-LLH-LLH-HLH" },
+  { "code": "MIRROR",  "pattern": "HHM-HHM-HHM-MHM-HMM" },
+  { "code": "WICKED",  "pattern": "HHH-HHM-HHH-HML-HHH" },
+  { "code": "SNOW",    "pattern": "LLL-LLL-LLH-LLL-LHL" },
+  { "code": "FIRE",    "pattern": "HHH-HHL-HHH-HHH-HHH" },
+  { "code": "MUTE",    "pattern": "LML-LML-LML-LML-LML" },
+  { "code": "SMILE",   "pattern": "MML-MHL-MMH-MHL-MMH" },
+  { "code": "CHAIN",   "pattern": "MLM-MLM-MLM-MLM-MLM" },
+  { "code": "SKULL",   "pattern": "HHH-HMM-HHH-HHH-HMM" },
+  { "code": "MASK",    "pattern": "MLH-MMH-MHL-MMH-MMH" },
+  { "code": "ASHES",   "pattern": "LHH-LLL-LLL-LML-LLL" },
+  { "code": "GHOST",   "pattern": "MMM-MMM-MMM-MMM-MML" },
+  { "code": "CHAOS",   "pattern": "HLM-MLH-LHM-HLM-MLH" }
+];
+    const DIM_EXPLANATIONS = {
+  "S1": {
+    "L": "容易被别人的评价影响，对自己不太确定。",
+    "M": "有时候自信，有时候心虚，随场景切换。",
+    "H": "对自己有比较清晰的判断，不太被路人言论打散。"
+  },
+  "S2": {
+    "L": "不太清楚自己为什么笑，笑点像个黑箱。",
+    "M": "大概知道一点，但说不太清楚。",
+    "H": "很了解自己的笑点，知道什么戳中自己。"
+  },
+  "S3": {
+    "L": "比较在意别人的感受，不太敢说真话。",
+    "M": "在真诚和体面之间反复横跳。",
+    "H": "有自己的价值判断，不太容易被说服。"
+  },
+  "E1": {
+    "L": "很在意别人的反馈，怕说错话得罪人。",
+    "M": "偶尔在意，偶尔无所谓，情绪弹性中等。",
+    "H": "不太会被别人的反应影响，内心比较稳。"
+  },
+  "E2": {
+    "L": "共情能力很强，悲剧面前很难笑出来。",
+    "M": "会共情，但也能在适当的时候笑一下。",
+    "H": "共情偏弱，好笑和悲伤可以分开关机。"
+  },
+  "E3": {
+    "L": "很在意关系中的和谐，会主动妥协。",
+    "M": "在乎关系，但也有自己的底线。",
+    "H": "关系里比较独立，不太会为和谐而委屈自己。"
+  },
+  "A1": {
+    "L": "更愿意相信世界的底色是好的。",
+    "M": "不好说，有好有坏，观望为主。",
+    "H": "觉得世界本身就挺烂的，笑就完了。"
+  },
+  "A2": {
+    "L": "认为应该有基本底线，不能什么都拿来开玩笑。",
+    "M": "看场合和分寸，不太极端。",
+    "H": "什么都可以开玩笑，言论自由。"
+  },
+  "A3": {
+    "L": "容易感到虚无，觉得很多事没有意义。",
+    "M": "偶尔有目标，偶尔想摆烂，半开机状态。",
+    "H": "有自己的方向感，不太被虚无感困扰。"
+  },
+  "Ac1": {
+    "L": "笑更多是出于回避和防御，而不是认同。",
+    "M": "动机混合，有时候是真觉得好笑。",
+    "H": "笑是因为认同，是主动的、积极的。"
+  },
+  "Ac2": {
+    "L": "反应慢，容易犹豫，怕说错话。",
+    "M": "偶尔果断，偶尔纠结，正常水平。",
+    "H": "反应快，不太会犹豫，想到就说了。"
+  },
+  "Ac3": {
+    "L": "比较克制，不太敢直接表达。",
+    "M": "有时候敢说，有时候怂，看情况。",
+    "H": "表达欲强，不太会憋着，说了再说。"
+  },
+  "So1": {
+    "L": "社交中比较被动，不太主动输出。",
+    "M": "有人接就聊，没人接也不硬凑。",
+    "H": "社交中比较主动，不怕抛梗。"
+  },
+  "So2": {
+    "L": "喜欢和人亲近，不太设防。",
+    "M": "看人设防程度，弹性社交。",
+    "H": "边界感强，不轻易让人靠太近。"
+  },
+  "So3": {
+    "L": "比较真实，在不同人面前差别不大。",
+    "M": "熟人和陌生人面前会有差别，但不极端。",
+    "H": "在不同人面前是完全不同的版本。"
+  }
+};
+    const dimensionOrder = ['S1','S2','S3','E1','E2','E3','A1','A2','A3','Ac1','Ac2','Ac3','So1','So2','So3'];
+
+    const DRUNK_TRIGGER_QUESTION_ID = 'drink_gate_q2';
+
+    const app = {
+      shuffledQuestions: [],
+      answers: {},
+      previewMode: false
+    };
+
+    const screens = {
+      intro: document.getElementById('intro'),
+      test: document.getElementById('test'),
+      result: document.getElementById('result')
+    };
+
+    const questionList = document.getElementById('questionList');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const submitBtn = document.getElementById('submitBtn');
+    const testHint = document.getElementById('testHint');
+
+    function showScreen(name) {
+      Object.entries(screens).forEach(([key, el]) => {
+        el.classList.toggle('active', key === name);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function getVisibleQuestions() {
+      const visible = [...app.shuffledQuestions];
+      const gateIndex = visible.findIndex(q => q.id === 'drink_gate_q1');
+      if (gateIndex !== -1 && app.answers['drink_gate_q1'] === 3) {
+        visible.splice(gateIndex + 1, 0, specialQuestions[1]);
+      }
+      return visible;
+    }
+
+    function getQuestionMetaLabel(q) {
+      if (q.special) return '补充题';
+      return app.previewMode ? dimensionMeta[q.dim].name : '维度已隐藏';
+    }
+
+    function renderQuestions() {
+      const visibleQuestions = getVisibleQuestions();
+      questionList.innerHTML = '';
+      visibleQuestions.forEach((q, index) => {
+        const card = document.createElement('article');
+        card.className = 'question';
+        card.innerHTML = `
+          <div class="question-meta">
+            <div class="badge">第 ${index + 1} 题</div>
+            <div>${getQuestionMetaLabel(q)}</div>
+          </div>
+          <div class="question-title">${q.text}</div>
+          <div class="options">
+            ${q.options.map((opt, i) => {
+              const code = ['A', 'B', 'C', 'D'][i] || String(i + 1);
+              const checked = app.answers[q.id] === opt.value ? 'checked' : '';
+              return `
+                <label class="option">
+                  <input type="radio" name="${q.id}" value="${opt.value}" ${checked} />
+                  <div class="option-code">${code}</div>
+                  <div>${opt.label}</div>
+                </label>
+              `;
+            }).join('')}
+          </div>
+        `;
+        questionList.appendChild(card);
+      });
+
+      questionList.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const { name, value } = e.target;
+          app.answers[name] = Number(value);
+
+          if (name === 'drink_gate_q1') {
+            if (Number(value) !== 3) {
+              delete app.answers['drink_gate_q2'];
+            }
+            renderQuestions();
+            return;
+          }
+
+          updateProgress();
+        });
+      });
+
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const visibleQuestions = getVisibleQuestions();
+      const total = visibleQuestions.length;
+      const done = visibleQuestions.filter(q => app.answers[q.id] !== undefined).length;
+      const percent = total ? (done / total) * 100 : 0;
+      progressBar.style.width = `${percent}%`;
+      progressText.textContent = `${done} / ${total}`;
+      const complete = done === total && total > 0;
+      submitBtn.disabled = !complete;
+      testHint.textContent = complete
+        ? '都做完了。现在可以把你的电子魂魄交给结果页审判。'
+        : '全选完才会放行。世界已经够乱了，起码把题做完整。';
+    }
+
+    function sumToLevel(score) {
+      if (score <= 3) return 'L';
+      if (score === 4) return 'M';
+      return 'H';
+    }
+
+    function levelNum(level) {
+      return { L: 1, M: 2, H: 3 }[level];
+    }
+
+    function parsePattern(pattern) {
+      return pattern.replace(/-/g, '').split('');
+    }
+
+    function getDrunkTriggered() {
+      return app.answers[DRUNK_TRIGGER_QUESTION_ID] === 2;
+    }
+
+    function computeResult() {
+      const rawScores = {};
+      const levels = {};
+      Object.keys(dimensionMeta).forEach(dim => { rawScores[dim] = 0; });
+
+      questions.forEach(q => {
+        rawScores[q.dim] += Number(app.answers[q.id] || 0);
+      });
+
+      Object.entries(rawScores).forEach(([dim, score]) => {
+        levels[dim] = sumToLevel(score);
+      });
+
+      const userVector = dimensionOrder.map(dim => levelNum(levels[dim]));
+      const ranked = NORMAL_TYPES.map(type => {
+        const vector = parsePattern(type.pattern).map(levelNum);
+        let distance = 0;
+        let exact = 0;
+        for (let i = 0; i < vector.length; i++) {
+          const diff = Math.abs(userVector[i] - vector[i]);
+          distance += diff;
+          if (diff === 0) exact += 1;
+        }
+        const similarity = Math.max(0, Math.round((1 - distance / 30) * 100));
+        return { ...type, ...TYPE_LIBRARY[type.code], distance, exact, similarity };
+      }).sort((a, b) => {
+        if (a.distance !== b.distance) return a.distance - b.distance;
+        if (b.exact !== a.exact) return b.exact - a.exact;
+        return b.similarity - a.similarity;
+      });
+
+      const bestNormal = ranked[0];
+      const drunkTriggered = getDrunkTriggered();
+
+      let finalType;
+      let modeKicker = '你的主类型';
+      let badge = `匹配度 ${bestNormal.similarity}% · 精准命中 ${bestNormal.exact}/15 维`;
+      let sub = '维度命中度较高，当前结果可视为你的第一人格画像。';
+      let special = false;
+      let secondaryType = null;
+
+      if (drunkTriggered) {
+        finalType = TYPE_LIBRARY.DRUNK;
+        secondaryType = bestNormal;
+        modeKicker = '隐藏人格已激活';
+        badge = '匹配度 100% · 酒精异常因子已接管';
+        sub = '乙醇亲和性过强，系统已直接跳过常规人格审判。';
+        special = true;
+      } else if (bestNormal.similarity < 60) {
+        finalType = TYPE_LIBRARY.HHHH;
+        modeKicker = '系统强制兜底';
+        badge = `标准人格库最高匹配仅 ${bestNormal.similarity}%`;
+        sub = '标准人格库对你的脑回路集体罢工了，于是系统把你强制分配给了 HHHH。';
+        special = true;
+      } else {
+        finalType = bestNormal;
+      }
+
+      return {
+        rawScores,
+        levels,
+        ranked,
+        bestNormal,
+        finalType,
+        modeKicker,
+        badge,
+        sub,
+        special,
+        secondaryType
+      };
+    }
+
+    function renderDimList(result) {
+      const dimList = document.getElementById('dimList');
+      dimList.innerHTML = dimensionOrder.map(dim => {
+        const level = result.levels[dim];
+        const explanation = DIM_EXPLANATIONS[dim][level];
+        return `
+          <div class="dim-item">
+            <div class="dim-item-top">
+              <div class="dim-item-name">${dimensionMeta[dim].name}</div>
+              <div class="dim-item-score">${level} / ${result.rawScores[dim]}分</div>
+            </div>
+            <p>${explanation}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderResult() {
+      const result = computeResult();
+      const type = result.finalType;
+
+      document.getElementById('resultModeKicker').textContent = result.modeKicker;
+      document.getElementById('resultTypeName').textContent = `${type.code}（${type.cn}）`;
+      document.getElementById('matchBadge').textContent = result.badge;
+      document.getElementById('resultTypeSub').textContent = result.sub;
+      document.getElementById('resultDesc').textContent = type.desc;
+      document.getElementById('posterCaption').textContent = type.intro;
+      document.getElementById('funNote').textContent = result.special
+        ? '本测试仅供娱乐。隐藏人格和傻乐兜底都属于作者故意埋的损招，请勿把它当成医学、心理学、相学、命理学或灵异学依据。'
+        : '本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、招魂、算命或人生判决书。你可以笑，但别太当真。';
+
+      const posterBox = document.getElementById('posterBox');
+      const posterImage = document.getElementById('posterImage');
+      const imageSrc = TYPE_IMAGES[type.code];
+      if (imageSrc) {
+        posterImage.src = imageSrc;
+        posterImage.alt = `${type.code}（${type.cn}）`;
+        posterBox.classList.remove('no-image');
+      } else {
+        posterImage.removeAttribute('src');
+        posterImage.alt = '';
+        posterBox.classList.add('no-image');
+      }
+
+      renderDimList(result);
+      showScreen('result');
+    }
+
+    function startTest(preview = false) {
+      app.previewMode = preview;
+      app.answers = {};
+      const shuffledRegular = shuffle(questions);
+      const insertIndex = Math.floor(Math.random() * shuffledRegular.length) + 1;
+      app.shuffledQuestions = [
+        ...shuffledRegular.slice(0, insertIndex),
+        specialQuestions[0],
+        ...shuffledRegular.slice(insertIndex)
+      ];
+      renderQuestions();
+      showScreen('test');
+    }
+
+    document.getElementById('startBtn').addEventListener('click', () => startTest(false));
+    document.getElementById('backIntroBtn').addEventListener('click', () => showScreen('intro'));
+    document.getElementById('submitBtn').addEventListener('click', renderResult);
+    document.getElementById('restartBtn').addEventListener('click', () => startTest(false));
+    document.getElementById('toTopBtn').addEventListener('click', () => showScreen('intro'));
+  </script>
+
+</body>
+</html>
